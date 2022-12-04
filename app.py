@@ -170,7 +170,7 @@ class NLPAPP:
 
         txt = ''
         for i in response['sentiment']:
-            txt = i + ' -> ' + response['sentiment'][i] + '\n'
+            txt = txt + i + ' -> ' + str(response['sentiment'][i]) + '\n'
 
         self.sentiment_result['text'] = txt
 
