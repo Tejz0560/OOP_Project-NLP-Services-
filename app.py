@@ -1,8 +1,14 @@
 from tkinter import *
+from mydb import Database
+from tkinter import messagebox
 
 class NLPAPP:
 
     def __init__(self) -> None:
+        #Database onject
+        self.db = Database()
+
+        #tkinter object
         self.root = Tk()
         self.root.title('NLP APP')
         self.root.geometry('350x600')
@@ -35,7 +41,7 @@ class NLPAPP:
         self.password_input = Entry(self.root,width=50,show='*')
         self.password_input.pack(pady=(5,10),ipady=4)
 
-        login_btn = Button(self.root,text="Login",width=30,height=2)
+        login_btn = Button(self.root,text="Login",width=30,height=2,command=self.perform_login)
         login_btn.pack(pady=(10,10))
 
         label3 = Label(self.root,text='Not a Member?')
@@ -71,7 +77,7 @@ class NLPAPP:
         self.password_input = Entry(self.root,width=50,show='*')
         self.password_input.pack(pady=(5,10),ipady=4)
 
-        register_btn = Button(self.root,text="Register",width=30,height=2)
+        register_btn = Button(self.root,text="Register",width=30,height=2,command=self.perform_registration)
         register_btn.pack(pady=(10,10))
 
         label3 = Label(self.root,text='Already a Member?')
@@ -79,6 +85,31 @@ class NLPAPP:
 
         redirect_btn = Button(self.root,text="Login",width=10,height=1, command=self.login_gui)
         redirect_btn.pack(pady=(10,10))
+
+    
+    def perform_registration(self):
+        name = self.name_input.get()
+        email = self.email_input.get()
+        password = self.password_input.get()
+
+        response = self.db.add_data(name,email,password)
+
+        if response:
+            messagebox.showinfo('Success','Registration Successfull! Login Now..')
+        else:
+            messagebox.showerror('Error','Email Already Exits')
+    
+    def perform_login(self):
+
+        email = self.email_input.get()
+        password = self.password_input.get()
+
+        response = self.db.search(email,password)
+
+        if response:
+            pass
+        else:
+            messagebox.showerror('Error','Incorrect Credentials')
 
 
 nlp = NLPAPP()
