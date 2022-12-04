@@ -1,12 +1,14 @@
 from tkinter import *
 from mydb import Database
 from tkinter import messagebox
+from myapi import API
 
 class NLPAPP:
 
     def __init__(self) -> None:
         #Database onject
         self.db = Database()
+        self.api = API()
 
         #tkinter object
         self.root = Tk()
@@ -107,9 +109,70 @@ class NLPAPP:
         response = self.db.search(email,password)
 
         if response:
-            pass
+            self.home_gui()
         else:
             messagebox.showerror('Error','Incorrect Credentials')
 
 
+    def home_gui(self):
+        self.clear()
+
+        heading = Label(self.root,text='NLP App',bg='#444343',fg='white')
+        heading.pack(pady=(30,30))
+        heading.configure(font=('verdana',24,'bold'))
+        
+        sentiment_btn = Button(self.root,text="Sentiment Analysis",width=30,height=2,command=self.sentiment_gui)
+        sentiment_btn.pack(pady=(10,10))
+
+        ner_btn = Button(self.root,text="Name Entity Recognition",width=30,height=2,command=self.ner_gui)
+        ner_btn.pack(pady=(10,10))
+
+        emotion_btn = Button(self.root,text="Emotion Prediction",width=30,height=2,command=self.emotion_gui)
+        emotion_btn.pack(pady=(10,10))
+
+        logout_btn = Button(self.root,text="Logout",width=10,height=1, command=self.login_gui)
+        logout_btn.pack(pady=(10,10))
+
+
+    def sentiment_gui(self):
+
+        self.clear()
+
+        heading = Label(self.root,text='NLP App',bg='#444343',fg='white')
+        heading.pack(pady=(30,30))
+        heading.configure(font=('verdana',24,'bold'))
+
+        heading1 = Label(self.root,text='Sentiment Analysis',bg='#444343',fg='white')
+        heading1.pack(pady=(10,20))
+        heading1.configure(font=('verdana',20))
+
+        label1 = Label(self.root,text='Enter the Text')
+        label1.pack(pady=(10,10))
+
+        self.sentiment_input = Entry(self.root,width=50)
+        self.sentiment_input.pack(pady=(5,10),ipady=4)
+
+        sentiment_btn = Button(self.root,text="Analyze Sentiment",width=10,height=1, command=self.do_sentiment_analysis)
+        sentiment_btn.pack(pady=(10,10))
+
+        self.sentiment_result = Label(self.root,text='',bg='#444343')
+        self.sentiment_result.pack(pady=(10,10))
+        self.sentiment_result.configure(font=('verdana',20))
+
+        goBack_btn = Button(self.root,text="Go Back",width=10,height=1, command=self.home_gui)
+        goBack_btn.pack(pady=(10,10))
+
+
+    def do_sentiment_analysis(self):
+
+        text = self.sentiment_input.get()
+        response = self.api.sentiment_analysis(text)
+
+        txt = ''
+        for i in response['sentiment']:
+            txt = i + ' -> ' + response['sentiment'][i] + '\n'
+
+        self.sentiment_result['text'] = txt
+
+    
 nlp = NLPAPP()
