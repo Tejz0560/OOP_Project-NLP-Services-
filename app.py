@@ -253,5 +253,6 @@ class NLPAPP:
 
         self.emotion_result['text'] = txt
 
-    
-nlp = NLPAPP()
+
+if __name__ == '__main__':
+    nlp = NLPAPP()
