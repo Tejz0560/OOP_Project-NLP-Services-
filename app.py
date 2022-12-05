@@ -152,12 +152,12 @@ class NLPAPP:
         self.sentiment_input = Entry(self.root,width=50)
         self.sentiment_input.pack(pady=(5,10),ipady=4)
 
-        sentiment_btn = Button(self.root,text="Analyze Sentiment",width=10,height=1, command=self.do_sentiment_analysis)
+        sentiment_btn = Button(self.root,text="Analyze Sentiment",width=15,height=1, command=self.do_sentiment_analysis)
         sentiment_btn.pack(pady=(10,10))
 
-        self.sentiment_result = Label(self.root,text='',bg='#444343')
+        self.sentiment_result = Label(self.root,text='',bg='#444343',fg='white')
         self.sentiment_result.pack(pady=(10,10))
-        self.sentiment_result.configure(font=('verdana',20))
+        self.sentiment_result.configure(font=('verdana',10))
 
         goBack_btn = Button(self.root,text="Go Back",width=10,height=1, command=self.home_gui)
         goBack_btn.pack(pady=(10,10))
@@ -173,6 +173,85 @@ class NLPAPP:
             txt = txt + i + ' -> ' + str(response['sentiment'][i]) + '\n'
 
         self.sentiment_result['text'] = txt
+
+    def ner_gui(self):
+        self.clear()
+
+        heading = Label(self.root,text='NLP App',bg='#444343',fg='white')
+        heading.pack(pady=(30,30))
+        heading.configure(font=('verdana',24,'bold'))
+
+        heading1 = Label(self.root,text='Name Entity Recognition',bg='#444343',fg='white')
+        heading1.pack(pady=(10,20))
+        heading1.configure(font=('verdana',20))
+
+        label1 = Label(self.root,text='Enter the Text')
+        label1.pack(pady=(10,10))
+
+        self.ner_input = Entry(self.root,width=50)
+        self.ner_input.pack(pady=(5,10),ipady=4)
+
+        ner_btn = Button(self.root,text="NER",width=15,height=1, command=self.do_ner)
+        ner_btn.pack(pady=(10,10))
+
+        self.ner_result = Label(self.root,text='',bg='#444343',fg='white')
+        self.ner_result.pack(pady=(10,10))
+        self.ner_result.configure(font=('verdana',10))
+
+        goBack_btn = Button(self.root,text="Go Back",width=10,height=1, command=self.home_gui)
+        goBack_btn.pack(pady=(10,10))
+
+    def do_ner(self):
+
+        text = self.ner_input.get()
+        response = self.api.ner(text)
+
+        txt = ''
+        for i in response['entities']:
+            for j in i:
+                txt = txt + str(j) +' -> ' + str(i[j])  + '\n'
+            txt = txt + '\n'
+
+        self.ner_result['text'] = txt
+    
+
+    def emotion_gui(self):
+        self.clear()
+
+        heading = Label(self.root,text='NLP App',bg='#444343',fg='white')
+        heading.pack(pady=(30,30))
+        heading.configure(font=('verdana',24,'bold'))
+
+        heading1 = Label(self.root,text='Emotion Detection',bg='#444343',fg='white')
+        heading1.pack(pady=(10,20))
+        heading1.configure(font=('verdana',20))
+
+        label1 = Label(self.root,text='Enter the Text')
+        label1.pack(pady=(10,10))
+
+        self.emotion_input = Entry(self.root,width=50)
+        self.emotion_input.pack(pady=(5,10),ipady=4)
+
+        emotion_btn = Button(self.root,text="Detect Emotion",width=15,height=1, command=self.do_emotion)
+        emotion_btn.pack(pady=(10,10))
+
+        self.emotion_result = Label(self.root,text='',bg='#444343',fg='white')
+        self.emotion_result.pack(pady=(10,10))
+        self.emotion_result.configure(font=('verdana',10))
+
+        goBack_btn = Button(self.root,text="Go Back",width=10,height=1, command=self.home_gui)
+        goBack_btn.pack(pady=(10,10))
+
+    def do_emotion(self):
+
+        text = self.emotion_input.get()
+        response = self.api.emotion(text)
+
+        txt = ''
+        for i in response['emotion']:
+            txt = txt + i + ' -> ' + str(response['emotion'][i]) + '\n'
+
+        self.emotion_result['text'] = txt
 
     
 nlp = NLPAPP()

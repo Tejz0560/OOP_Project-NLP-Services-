@@ -11,3 +11,10 @@ class API:
         response = paralleldots.sentiment(text)
         return response
 
+    def ner(self,text):
+        response = paralleldots.ner(text)
+        return response
+
+    def emotion(self,text):
+        response = paralleldots.emotion(text)
+        return response
